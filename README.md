@@ -23,6 +23,7 @@ Import the middleware package that is part of the Fiber web framework
 import (
     "github.com/gofiber/fiber/v2"
     "go.opentelemetry.io/otel/api/trace"
+    "go.opentelemetry.io/otel/label"
     fiberOpentelemetry "github.com/psmarcin/fiber-opentelemetry"
 )
 ```
@@ -36,13 +37,21 @@ app.Use(fiberOpentelemetry.New(fiberOpentelemetry.Config{
     Tracer: trace,
 }))
 
-// Or extend your config for customization
-app.Use(requestid.New(requestid.Config{
-    Header:    "X-Custom-Header",
-    Generator: func () string {
-        return "static-id"
-    },
-}))
+app.Get("/", func(ctx *fiber.Ctx) error {
+    c := fiber_opentelemetry.FromCtx(ctx)
+    
+    ctx, span := tracer.Start(ctx, "trace-name")
+    defer span.End()
+    
+    // attribute
+    span.SetAttributes(label.String("attribute-name", "123"))
+	
+    // error
+    span.RecordError(ctx, err)
+    
+    // event
+    span.AddEvent(ctx, "event-name")
+})
 ```
 
 ### Config
