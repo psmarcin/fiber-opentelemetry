@@ -21,9 +21,9 @@ Import the middleware package that is part of the Fiber web framework
 
 ```go
 import (
-"github.com/gofiber/fiber/v2"
-"go.opentelemetry.io/otel/api/trace"
-fiberOpentelemetry "github.com/psmarcin/fiber-opentelemetry"
+    "github.com/gofiber/fiber/v2"
+    "go.opentelemetry.io/otel/api/trace"
+    fiberOpentelemetry "github.com/psmarcin/fiber-opentelemetry"
 )
 ```
 
