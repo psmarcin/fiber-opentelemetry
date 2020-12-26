@@ -1,9 +1,9 @@
-package fiber_opentelemetry
+package fiber_otel
 
 import (
 	"context"
 	"github.com/gofiber/fiber/v2"
-	"go.opentelemetry.io/otel/api/trace"
+	"go.opentelemetry.io/otel/trace"
 )
 
 func FromCtx(ctx *fiber.Ctx) context.Context {

@@ -1,12 +1,15 @@
-package fiber_opentelemetry
+package fiber_otel
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"go.opentelemetry.io/otel/api/trace"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/trace"
 	"go.opentelemetry.io/otel/semconv"
 )
 
 const LocalsCtxKey = "otel-ctx"
+
+var Tracer = otel.Tracer("fiber-otel-router")
 
 // New creates a new middleware handler
 func New(config ...Config) fiber.Handler {
@@ -19,12 +22,12 @@ func New(config ...Config) fiber.Handler {
 		spanOptions := concatSpanOptions(
 			[]trace.SpanOption{
 				trace.WithAttributes(semconv.HTTPMethodKey.String(c.Method())),
-				trace.WithAttributes(semconv.HTTPUrlKey.String(c.OriginalURL())),
+				trace.WithAttributes(semconv.HTTPURLKey.String(c.OriginalURL())),
 			},
 			cfg.TracerStartAttributes,
 		)
 
-		ctx, span := cfg.Tracer.Start(
+		ctx, span := Tracer.Start(
 			c.Context(),
 			cfg.SpanName,
 			spanOptions...,

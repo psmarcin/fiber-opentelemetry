@@ -1,4 +1,4 @@
-package fiber_opentelemetry
+package fiber_otel
 
 import (
 	"github.com/stretchr/testify/assert"

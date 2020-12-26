@@ -1,10 +1,10 @@
-package fiber_opentelemetry
+package fiber_otel
 
 import (
 	"context"
 	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/assert"
-	"go.opentelemetry.io/otel/api/trace"
+	"go.opentelemetry.io/otel/trace"
 	"net/http/httptest"
 	"testing"
 )
@@ -12,7 +12,7 @@ import (
 func TestFromCtx(t *testing.T) {
 	app := fiber.New()
 	app.Use(New(Config{
-		Tracer: trace.NoopTracerProvider().Tracer("test"),
+		Tracer: trace.NewNoopTracerProvider().Tracer("test"),
 	}))
 
 	var ctxVal context.Context
@@ -30,7 +30,7 @@ func TestFromCtx(t *testing.T) {
 func TestSpanFromCtx(t *testing.T) {
 	app := fiber.New()
 	app.Use(New(Config{
-		Tracer: trace.NoopTracerProvider().Tracer("test"),
+		Tracer: trace.NewNoopTracerProvider().Tracer("test"),
 	}))
 
 	var ctxVal trace.Span

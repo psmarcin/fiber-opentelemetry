@@ -1,7 +1,7 @@
-package fiber_opentelemetry
+package fiber_otel
 
 import (
-	"go.opentelemetry.io/otel/api/trace"
+	"go.opentelemetry.io/otel/trace"
 )
 
 // Config defines the config for middleware.
