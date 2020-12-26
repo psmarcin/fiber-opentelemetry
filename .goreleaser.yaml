@@ -1,5 +1,5 @@
 builds:
-  skip: true
+  - skip: true
 checksum:
   name_template: 'checksums.txt'
 snapshot:
