@@ -3,8 +3,8 @@ package fiber_otel
 import (
 	"github.com/gofiber/fiber/v2"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/trace"
 	"go.opentelemetry.io/otel/semconv"
+	"go.opentelemetry.io/otel/trace"
 )
 
 const LocalsCtxKey = "otel-ctx"
@@ -22,27 +22,42 @@ func New(config ...Config) fiber.Handler {
 		spanOptions := concatSpanOptions(
 			[]trace.SpanOption{
 				trace.WithAttributes(semconv.HTTPMethodKey.String(c.Method())),
+				trace.WithAttributes(semconv.HTTPTargetKey.String(string(c.Request().RequestURI()))),
+				trace.WithAttributes(semconv.HTTPRouteKey.String(c.Route().Path)),
 				trace.WithAttributes(semconv.HTTPURLKey.String(c.OriginalURL())),
+				trace.WithAttributes(semconv.NetHostIPKey.String(c.IP())),
+				trace.WithAttributes(semconv.HTTPUserAgentKey.String(string(c.Request().Header.UserAgent()))),
+				trace.WithAttributes(semconv.HTTPRequestContentLengthKey.Int(c.Request().Header.ContentLength())),
+				trace.WithAttributes(semconv.HTTPSchemeKey.String(c.Protocol())),
+				trace.WithAttributes(semconv.NetTransportTCP),
+				trace.WithSpanKind(trace.SpanKindServer),
+				// TODO:
+				// - x-forwarded-for
+				// -
 			},
 			cfg.TracerStartAttributes,
 		)
 
-		ctx, span := Tracer.Start(
+		otelCtx, span := Tracer.Start(
 			c.Context(),
-			cfg.SpanName,
+			c.Route().Path,
 			spanOptions...,
 		)
 
-		c.Locals(LocalsCtxKey, ctx)
+		c.Locals(LocalsCtxKey, otelCtx)
 		defer span.End()
+
 		err := c.Next()
 
-		span.SetAttributes(semconv.HTTPAttributesFromHTTPStatusCode(c.Response().StatusCode())...)
+		statusCode := c.Response().StatusCode()
+		attrs := semconv.HTTPAttributesFromHTTPStatusCode(statusCode)
+		spanStatus, spanMessage := semconv.SpanStatusFromHTTPStatusCode(statusCode)
+		span.SetAttributes(attrs...)
+		span.SetStatus(spanStatus, spanMessage)
 
 		return err
 	}
 }
-
 
 func concatSpanOptions(sources ...[]trace.SpanOption) []trace.SpanOption {
 	var spanOptions []trace.SpanOption
