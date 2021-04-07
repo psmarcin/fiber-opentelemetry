@@ -19,7 +19,6 @@ var ConfigDefault = Config{
 	TracerStartAttributes: []trace.SpanOption{
 		trace.WithSpanKind(trace.SpanKindServer),
 		trace.WithNewRoot(),
-		trace.WithRecord(),
 	},
 }
 
