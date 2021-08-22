@@ -37,10 +37,9 @@ func New(config ...Config) fiber.Handler {
 			},
 			cfg.TracerStartAttributes,
 		)
-
 		otelCtx, span := Tracer.Start(
 			c.Context(),
-			c.Route().Path,
+			fmt.Sprintf("%s %s", c.Method(), c.Request().RequestURI())
 			spanOptions...,
 		)
 
