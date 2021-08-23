@@ -3,7 +3,7 @@ package fiber_otel
 import (
 	"github.com/gofiber/fiber/v2"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/semconv"
+	"go.opentelemetry.io/otel/semconv/v1.4.0"
 	"go.opentelemetry.io/otel/trace"
 )
 
@@ -20,7 +20,7 @@ func New(config ...Config) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		// concat all span options, dynamic and static
 		spanOptions := concatSpanOptions(
-			[]trace.SpanOption{
+			[]trace.SpanStartOption{
 				trace.WithAttributes(semconv.HTTPMethodKey.String(c.Method())),
 				trace.WithAttributes(semconv.HTTPTargetKey.String(string(c.Request().RequestURI()))),
 				trace.WithAttributes(semconv.HTTPRouteKey.String(c.Route().Path)),
@@ -59,8 +59,8 @@ func New(config ...Config) fiber.Handler {
 	}
 }
 
-func concatSpanOptions(sources ...[]trace.SpanOption) []trace.SpanOption {
-	var spanOptions []trace.SpanOption
+func concatSpanOptions(sources ...[]trace.SpanStartOption) []trace.SpanStartOption {
+	var spanOptions []trace.SpanStartOption
 	for _, source := range sources {
 		for _, option := range source {
 			spanOptions = append(spanOptions, option)
