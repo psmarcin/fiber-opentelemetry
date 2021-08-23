@@ -60,7 +60,7 @@ app.Get("/", func(ctx *fiber.Ctx) error {
 // Config defines the config for middleware.
 type Config struct {
     Tracer                trace.Tracer
-    TracerStartAttributes []trace.SpanOption
+    TracerStartAttributes []trace.SpanStartOption
     SpanName              string
     LocalKeyName          string
 }
@@ -72,7 +72,7 @@ type Config struct {
 var ConfigDefault = Config{
     SpanName:     "http/request",
     LocalKeyName: LocalsCtxKey,
-    TracerStartAttributes: []trace.SpanOption{
+    TracerStartAttributes: []trace.SpanStartOption{
         trace.WithSpanKind(trace.SpanKindServer),
         trace.WithNewRoot(),
         trace.WithRecord(),
