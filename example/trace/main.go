@@ -11,7 +11,6 @@ func main() {
 
 	// middleware use
 	app.Use(fiberOtel.New(fiberOtel.Config{
-		SpanName:     "http/request",
 		LocalKeyName: "custom-local-key-to-store-otel-context",
 	}))
 

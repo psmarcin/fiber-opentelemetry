@@ -8,13 +8,15 @@ import (
 type Config struct {
 	Tracer                trace.Tracer
 	TracerStartAttributes []trace.SpanStartOption
-	SpanName              string
-	LocalKeyName          string
+	// SpanName specifies a template for constructing span name.
+	// Scope is fiber context.
+	SpanName     string
+	LocalKeyName string
 }
 
 // ConfigDefault is the default config
 var ConfigDefault = Config{
-	SpanName:     "http/request",
+	SpanName:     "fiber/request {{ .Method }} {{ .Route.Path }}",
 	LocalKeyName: LocalsCtxKey,
 	TracerStartAttributes: []trace.SpanStartOption{
 		trace.WithSpanKind(trace.SpanKindServer),
@@ -38,6 +40,10 @@ func configDefault(config ...Config) Config {
 
 	if cfg.LocalKeyName == "" {
 		cfg.LocalKeyName = ConfigDefault.LocalKeyName
+	}
+
+	if cfg.SpanName == "" {
+		cfg.SpanName = ConfigDefault.SpanName
 	}
 
 	if len(cfg.TracerStartAttributes) == 0 {
