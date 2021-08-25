@@ -1,9 +1,13 @@
 package fiber_otel
 
 import (
+	"bytes"
+	"fmt"
+	"text/template"
+
 	"github.com/gofiber/fiber/v2"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/semconv/v1.4.0"
+	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 	"go.opentelemetry.io/otel/trace"
 )
 
@@ -15,6 +19,8 @@ var Tracer = otel.Tracer("fiber-otel-router")
 func New(config ...Config) fiber.Handler {
 	// Set default config
 	cfg := configDefault(config...)
+
+	spanTmpl := template.Must(template.New("span").Parse(cfg.SpanName))
 
 	// Return new handler
 	return func(c *fiber.Ctx) error {
@@ -38,16 +44,22 @@ func New(config ...Config) fiber.Handler {
 			cfg.TracerStartAttributes,
 		)
 
+		spanName := new(bytes.Buffer)
+		err := spanTmpl.Execute(spanName, c)
+		if err != nil {
+			return fmt.Errorf("cannot execute span name template: %w", err)
+		}
+
 		otelCtx, span := Tracer.Start(
 			c.Context(),
-			c.Route().Path,
+			spanName.String(),
 			spanOptions...,
 		)
 
 		c.Locals(LocalsCtxKey, otelCtx)
 		defer span.End()
 
-		err := c.Next()
+		err = c.Next()
 
 		statusCode := c.Response().StatusCode()
 		attrs := semconv.HTTPAttributesFromHTTPStatusCode(statusCode)
