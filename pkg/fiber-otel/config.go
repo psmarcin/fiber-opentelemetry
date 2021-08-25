@@ -16,7 +16,7 @@ type Config struct {
 
 // ConfigDefault is the default config
 var ConfigDefault = Config{
-	SpanName:     "{{ .Method }} {{ .Route.Path }}",
+	SpanName:     "HTTP {{ .Method }}",
 	LocalKeyName: LocalsCtxKey,
 	TracerStartAttributes: []trace.SpanStartOption{
 		trace.WithSpanKind(trace.SpanKindServer),
