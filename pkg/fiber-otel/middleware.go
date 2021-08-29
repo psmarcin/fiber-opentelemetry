@@ -2,6 +2,7 @@ package fiber_otel
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"text/template"
 
@@ -50,8 +51,14 @@ func New(config ...Config) fiber.Handler {
 			return fmt.Errorf("cannot execute span name template: %w", err)
 		}
 
+		var ctx context.Context = c.Context()
+
+		if l, ok := c.Locals(LocalsCtxKey).(context.Context); ok {
+			ctx = l
+		}
+
 		otelCtx, span := Tracer.Start(
-			c.Context(),
+			ctx,
 			spanName.String(),
 			spanOptions...,
 		)
