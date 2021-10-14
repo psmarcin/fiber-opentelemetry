@@ -8,6 +8,8 @@ github.com/gofiber/fiber/v2 v2.18.0 h1:xCWYSVoTNibHpzfciPwUSZGiTyTpTXYchCwynuJU0
 github.com/gofiber/fiber/v2 v2.18.0/go.mod h1:/LdZHMUXZvTTo7gU4+b1hclqCAdoQphNQ9bi9gutPyI=
 github.com/gofiber/fiber/v2 v2.19.0 h1:wBN88VUHT1RSC2ptwsRUl38DVWYkwnwUQY24s0keZVE=
 github.com/gofiber/fiber/v2 v2.19.0/go.mod h1:/LdZHMUXZvTTo7gU4+b1hclqCAdoQphNQ9bi9gutPyI=
+github.com/gofiber/fiber/v2 v2.20.2 h1:dqizbjO1pCmH6K+b+kBk7TCJK4rmgjJXvX8/MZDbK60=
+github.com/gofiber/fiber/v2 v2.20.2/go.mod h1:/LdZHMUXZvTTo7gU4+b1hclqCAdoQphNQ9bi9gutPyI=
 github.com/golang/snappy v0.0.3/go.mod h1:/XxbfmMg8lxefKM7IXC3fBNl/7bRcc72aCRzEWrmP2Q=
 github.com/google/go-cmp v0.5.6 h1:BKbKCqvP6I+rmFHt06ZmyQtvB8xAkWdhFyr0ZUNZcxQ=
 github.com/google/go-cmp v0.5.6/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
