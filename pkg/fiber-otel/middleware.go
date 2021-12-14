@@ -63,7 +63,7 @@ func New(config ...Config) fiber.Handler {
 
 		statusCode := c.Response().StatusCode()
 		attrs := semconv.HTTPAttributesFromHTTPStatusCode(statusCode)
-		spanStatus, spanMessage := semconv.SpanStatusFromHTTPStatusCode(statusCode)
+		spanStatus, spanMessage := semconv.SpanStatusFromHTTPStatusCodeAndSpanKind(statusCode, trace.SpanKindServer)
 		span.SetAttributes(attrs...)
 		span.SetStatus(spanStatus, spanMessage)
 
