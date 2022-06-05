@@ -1,5 +1,12 @@
 # Fiber OpenTelemetry
 
+## ❗️Important
+This repository is now **archived** because there is **new** official library available for everyone. Please migrate to https://github.com/gofiber/contrib/tree/main/otelfiber
+
+There is no need to keep two libraries to solve one problem. 
+
+## Old description
+
 OpenTelemetry trace middleware for [Fiber](https://github.com/gofiber/fiber) that adds traces to requests.
 
 ### Table of Contents
